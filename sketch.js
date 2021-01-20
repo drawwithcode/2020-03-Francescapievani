@@ -10,6 +10,7 @@ let col4 = "red";
 let volume = 0;
 let x = 70;
 let y = 70;
+let myWind = [];
 
 
 
@@ -54,10 +55,17 @@ volume = map(volume, 0, 1, 0, height);
 else if (mouseX < width / 2) {
 background("white");
 mySong.stop();
-
 }
 
 
+//vento
+push();
+  if (myWind.length < 50) myWind.push(new Wind());
+  for (var i = 0; i < myWind.length; i++) {
+    myWind[i].update();
+    myWind[i].display();
+    pop();
+  }
 
 //image
 imageMode(CENTER);
@@ -146,4 +154,48 @@ noFill()
 ellipse(0, 0, volume);
 pop()
 }
+}
+
+
+
+
+//classe vento
+class Wind  {
+
+  constructor() {
+    this.reset();
+  }
+  reset() {
+    this.x = random(width/4);
+    this.y = random(height/2);
+    this.vy = 30;
+    this.maxy = this.y + width;
+    this.r = 0;
+    this.tr = 0;
+  }
+  update() {
+    if (this.y < this.maxy) {
+      this.y += this.vy;
+    } else {
+      this.r++;
+    }
+    if (this.r > this.tr) this.reset();
+  }
+
+  display() {
+     if(mySong.isPlaying() == false){
+       stroke(255, 255, 255);
+       noFill();
+     } else {
+       stroke(0,0,255);
+       noFill();
+     }
+
+     push();
+     translate(-this.y,-this.x);
+     beginShape();
+     strokeWeight(1);
+     line(60, 0, 0, 0);
+     pop();
+  }
 }
